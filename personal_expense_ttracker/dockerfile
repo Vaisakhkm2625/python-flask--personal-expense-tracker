@@ -8,7 +8,9 @@ RUN apk add --no-cache --virtual .build-deps \
         linux-headers \
         mariadb-dev \
         python3-dev \
-        postgresql-dev
+        postgresql-dev \
+        mysql \
+        mariadb-client
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
