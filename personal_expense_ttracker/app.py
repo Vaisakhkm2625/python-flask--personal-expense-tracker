@@ -16,10 +16,10 @@ app = Flask(__name__)
 
 app.secret_key = 'a'
   
-app.config['MYSQL_HOST'] = 'remotemysql.com'
-app.config['MYSQL_USER'] = 'D2DxDUPBii'
-app.config['MYSQL_PASSWORD'] = 'r8XBO4GsMz'
-app.config['MYSQL_DB'] = 'D2DxDUPBii'
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'vaisakhkm'
+app.config['MYSQL_PASSWORD'] = '1234'
+app.config['MYSQL_DB'] = 'mymoney'
 
 mysql = MySQL(app)
 
@@ -53,9 +53,11 @@ def register():
         password = request.form['password']
         
 
+        print('got reg:',username,email,password)
         cursor = mysql.connection.cursor()
         cursor.execute('SELECT * FROM register WHERE username = % s', (username, ))
         account = cursor.fetchone()
+        print('account:')
         print(account)
         if account:
             msg = 'Account already exists !'
@@ -64,7 +66,7 @@ def register():
         elif not re.match(r'[A-Za-z0-9]+', username):
             msg = 'name must contain only characters and numbers !'
         else:
-            cursor.execute('INSERT INTO register VALUES (NULL, % s, % s, % s)', (username, email,password))
+            cursor.execute('INSERT INTO register VALUES (% s, % s, % s)', (username, email,password))
             mysql.connection.commit()
             msg = 'You have successfully registered !'
             return render_template('signup.html', msg = msg)
@@ -129,7 +131,8 @@ def addexpense():
     category = request.form['category']
     
     cursor = mysql.connection.cursor()
-    cursor.execute('INSERT INTO expenses VALUES (NULL,  % s, % s, % s, % s, % s, % s)', (session['id'] ,date, expensename, amount, paymode, category))
+    print(session['id'])
+    cursor.execute('INSERT INTO expenses VALUES (% s, % s, % s, % s, % s, % s)', [session['id'] ,date, expensename, amount, paymode, category])
     mysql.connection.commit()
     print(date + " " + expensename + " " + amount + " " + paymode + " " + category)
     
@@ -408,4 +411,4 @@ def logout():
              
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0',debug=True)
