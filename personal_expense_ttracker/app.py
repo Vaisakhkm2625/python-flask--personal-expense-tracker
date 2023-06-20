@@ -125,16 +125,16 @@ def adding():
 def addexpense():
     
     date = request.form['date']
-    expensename = request.form['expensename']
+    expense_name = request.form['expensename']
     amount = request.form['amount']
-    paymode = request.form['paymode']
+    pay_mode = request.form['paymode']
     category = request.form['category']
     
     cursor = mysql.connection.cursor()
     print("session: ",session['id'],"--")
-    cursor.execute('INSERT INTO expenses VALUES (0, % s, % s, % s, % s, % s, % s)', (session['id'] ,date, expensename, amount, paymode, category))
+    cursor.execute('INSERT INTO expenses VALUES (0, % s, % s, % s, % s, % s, % s)', (session['id'] ,date, expense_name, amount, pay_mode, category))
     mysql.connection.commit()
-    print(date + " " + expensename + " " + amount + " " + paymode + " " + category)
+    print(date + " " + expense_name + " " + amount + " " + pay_mode + " " + category)
     
     return redirect("/display")
 
@@ -173,7 +173,7 @@ def delete(id):
 def edit(id):
     cursor = mysql.connection.cursor()
     print("id:",id)
-    cursor.execute('SELECT * FROM expenses WHERE  id = %s', (id,))
+    cursor.execute('SELECT * FROM expenses WHERE expense_id= %s', (id,))
     row = cursor.fetchall()
    
     print(row[0])
@@ -187,24 +187,17 @@ def update(id):
   if request.method == 'POST' :
    
       date = request.form['date']
-      expensename = request.form['expensename']
+      expense_name = request.form['expensename']
       amount = request.form['amount']
-      paymode = request.form['paymode']
+      pay_mode = request.form['paymode']
       category = request.form['category']
     
       cursor = mysql.connection.cursor()
        
-      cursor.execute("UPDATE `expenses` SET `date` = % s , `expensename` = % s , `amount` = % s, `paymode` = % s, `category` = % s WHERE `expenses`.`id` = % s ",(date, expensename, amount, str(paymode), str(category),id))
+      cursor.execute("UPDATE `expenses` SET `date` = % s , `expense_name` = % s , `amount` = % s, `pay_mode` = % s, `category` = % s WHERE `expenses`.`expense_id` = % s ",(date, expense_name, amount, str(pay_mode), str(category),id))
       mysql.connection.commit()
       print('successfully updated')
       return redirect("/display")
-     
-      
-
-            
- 
-         
-    
             
  #limit
 @app.route("/limit" )
