@@ -69,7 +69,7 @@ def register():
             cursor.execute('INSERT INTO register VALUES (% s, % s, % s)', (username, email,password))
             mysql.connection.commit()
             msg = 'You have successfully registered !'
-            return render_template('signup.html', msg = msg)
+        return render_template('signup.html', msg = msg)
         
         
  
@@ -132,7 +132,7 @@ def addexpense():
     
     cursor = mysql.connection.cursor()
     print("session: ",session['id'],"--")
-    cursor.execute('INSERT INTO expenses VALUES ( % s, % s, % s, % s, % s, % s)', (session['id'] ,date, expensename, amount, paymode, category))
+    cursor.execute('INSERT INTO expenses VALUES (0, % s, % s, % s, % s, % s, % s)', (session['id'] ,date, expensename, amount, paymode, category))
     mysql.connection.commit()
     print(date + " " + expensename + " " + amount + " " + paymode + " " + category)
     
@@ -147,7 +147,7 @@ def display():
     print(session["username"],session['id'])
     
     cursor = mysql.connection.cursor()
-    cursor.execute('SELECT * FROM expenses WHERE userid = % s AND date ORDER BY `expenses`.`date` DESC',(str(session['id']),))
+    cursor.execute('SELECT * FROM expenses WHERE username = % s AND date ORDER BY `expenses`.`date` DESC',(str(session['id']),))
     expense = cursor.fetchall()
   
        
@@ -172,6 +172,7 @@ def delete(id):
 @app.route('/edit/<id>', methods = ['POST', 'GET' ])
 def edit(id):
     cursor = mysql.connection.cursor()
+    print("id:",id)
     cursor.execute('SELECT * FROM expenses WHERE  id = %s', (id,))
     row = cursor.fetchall()
    
@@ -235,12 +236,12 @@ def limitn():
 @app.route("/today")
 def today():
       cursor = mysql.connection.cursor()
-      cursor.execute('SELECT TIME(date)   , amount FROM expenses  WHERE userid = %s AND DATE(date) = DATE(NOW()) ',(str(session['id']),))
+      cursor.execute('SELECT TIME(date)   , amount FROM expenses  WHERE username= %s AND DATE(date) = DATE(NOW()) ',(str(session['id']),))
       texpense = cursor.fetchall()
       print(texpense)
       
       cursor = mysql.connection.cursor()
-      cursor.execute('SELECT * FROM expenses WHERE userid = % s AND DATE(date) = DATE(NOW()) AND date ORDER BY `expenses`.`date` DESC',(str(session['id']),))
+      cursor.execute('SELECT * FROM expenses WHERE username= % s AND DATE(date) = DATE(NOW()) AND date ORDER BY `expenses`.`date` DESC',(str(session['id']),))
       expense = cursor.fetchall()
   
       total=0
@@ -253,24 +254,24 @@ def today():
  
      
       for x in expense:
-          print('x3',x[3])
-          total += x[3]
-          if x[5] == "food":
-              t_food += x[3]
+          print('x4',x[4])
+          total += x[4]
+          if x[6] == "food":
+              t_food += x[4]
             
-          elif x[5] == "entertainment":
-              t_entertainment  += x[3]
+          elif x[6] == "entertainment":
+              t_entertainment  += x[4]
         
-          elif x[5] == "business":
-              t_business  += x[3]
-          elif x[5] == "rent":
-              t_rent  += x[3]
+          elif x[6] == "business":
+              t_business  += x[4]
+          elif x[6] == "rent":
+              t_rent  += x[4]
            
-          elif x[5] == "EMI":
-              t_EMI  += x[3]
+          elif x[6] == "EMI":
+              t_EMI  += x[4]
          
-          elif x[5] == "other":
-              t_other  += x[3]
+          elif x[6] == "other":
+              t_other  += x[4]
             
       print(total)
         
@@ -292,12 +293,12 @@ def today():
 @app.route("/month")
 def month():
       cursor = mysql.connection.cursor()
-      cursor.execute('SELECT DATE(date), SUM(amount) FROM expenses WHERE userid= %s AND MONTH(DATE(date))= MONTH(now()) GROUP BY DATE(date) ORDER BY DATE(date) ',(str(session['id']),))
+      cursor.execute('SELECT DATE(date), SUM(amount) FROM expenses WHERE username= %s AND MONTH(DATE(date))= MONTH(now()) GROUP BY DATE(date) ORDER BY DATE(date) ',(str(session['id']),))
       texpense = cursor.fetchall()
       print(texpense)
       
       cursor = mysql.connection.cursor()
-      cursor.execute('SELECT * FROM expenses WHERE userid = % s AND MONTH(DATE(date))= MONTH(now()) AND date ORDER BY `expenses`.`date` DESC',(str(session['id']),))
+      cursor.execute('SELECT * FROM expenses WHERE username = % s AND MONTH(DATE(date))= MONTH(now()) AND date ORDER BY `expenses`.`date` DESC',(str(session['id']),))
       expense = cursor.fetchall()
   
       total=0
@@ -347,12 +348,12 @@ def month():
 @app.route("/year")
 def year():
       cursor = mysql.connection.cursor()
-      cursor.execute('SELECT MONTH(date), SUM(amount) FROM expenses WHERE userid= %s AND YEAR(DATE(date))= YEAR(now()) GROUP BY MONTH(date) ORDER BY MONTH(date) ',(str(session['id']),))
+      cursor.execute('SELECT MONTH(date), SUM(amount) FROM expenses WHERE username= %s AND YEAR(DATE(date))= YEAR(now()) GROUP BY MONTH(date) ORDER BY MONTH(date) ',(str(session['id']),))
       texpense = cursor.fetchall()
       print(texpense)
       
       cursor = mysql.connection.cursor()
-      cursor.execute('SELECT * FROM expenses WHERE userid = % s AND YEAR(DATE(date))= YEAR(now()) AND date ORDER BY `expenses`.`date` DESC',(str(session['id']),))
+      cursor.execute('SELECT * FROM expenses WHERE username = % s AND YEAR(DATE(date))= YEAR(now()) AND date ORDER BY `expenses`.`date` DESC',(str(session['id']),))
       expense = cursor.fetchall()
   
       total=0
