@@ -13,6 +13,7 @@ def sendmail(TEXT,email):
     message  = 'Subject: {}\n\n{}'.format(SUBJECT, TEXT)
     s.sendmail("il.shridhartp24@gmail.com", email, message)
     s.quit()
+
 def sendgridmail(user,TEXT):
   
     from_email = Email("shridhartp24@gmail.com") 

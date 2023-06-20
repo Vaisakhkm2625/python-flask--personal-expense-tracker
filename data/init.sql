@@ -1,0 +1,2 @@
+GRANT ALL PRIVILEGES ON mymoney.* TO 'vaisakhkm'@'%';
+FLUSH PRIVILEGES;

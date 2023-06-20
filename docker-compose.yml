@@ -1,0 +1,30 @@
+version: "3.4"
+services:
+  webserver:
+    build:
+      context: ./personal_expense_ttracker
+    ports:
+      - "80:5000"
+    links:
+      - mysqldb
+    restart: 'always'
+  mysqldb:
+    image: mysql:latest
+    restart: 'always'
+    entrypoint: ['/entrypoint.sh', '--default-authentication-plugin=mysql_native_password']
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_USER: vaisakhkm
+      MYSQL_PASSWORD: 1234
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: 'Phpmyadmin'
+    links:
+      - mysqldb
+    environment:
+      PMA_HOST: mysqldb
+      PMA_PORT: 3306
+    ports:
+      - '800:80'
