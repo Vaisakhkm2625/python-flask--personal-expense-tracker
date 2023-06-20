@@ -131,8 +131,8 @@ def addexpense():
     category = request.form['category']
     
     cursor = mysql.connection.cursor()
-    print(session['id'])
-    cursor.execute('INSERT INTO expenses VALUES (% s, % s, % s, % s, % s, % s)', [session['id'] ,date, expensename, amount, paymode, category])
+    print("session: ",session['id'],"--")
+    cursor.execute('INSERT INTO expenses VALUES ( % s, % s, % s, % s, % s, % s)', (session['id'] ,date, expensename, amount, paymode, category))
     mysql.connection.commit()
     print(date + " " + expensename + " " + amount + " " + paymode + " " + category)
     
@@ -147,7 +147,7 @@ def display():
     print(session["username"],session['id'])
     
     cursor = mysql.connection.cursor()
-    cursor.execute('SELECT * FROM expenses WHERE userid = % s AND date ORDER BY `expenses`.`date` DESC',(str(session['id'])))
+    cursor.execute('SELECT * FROM expenses WHERE id = % s AND date ORDER BY `expenses`.`date` DESC',(str(session['id']),))
     expense = cursor.fetchall()
   
        
