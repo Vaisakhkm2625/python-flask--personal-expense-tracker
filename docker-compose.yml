@@ -8,6 +8,12 @@ services:
     links:
       - mysqldb
     restart: 'always'
+
+    networks:
+          network:
+            ipv4_address: 10.5.0.4
+
+
   mysqldb:
     image: mysql:latest
     restart: 'always'
@@ -16,8 +22,14 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: mymoney
       MYSQL_USER: vaisakhkm
       MYSQL_PASSWORD: 1234
+
+    networks:
+          network:
+            ipv4_address: 10.5.0.5
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: 'Phpmyadmin'
@@ -28,3 +40,16 @@ services:
       PMA_PORT: 3306
     ports:
       - '800:80'
+
+    networks:
+          network:
+            ipv4_address: 10.5.0.6
+
+
+networks:
+  network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1
