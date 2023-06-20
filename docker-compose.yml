@@ -17,14 +17,17 @@ services:
   mysqldb:
     image: mysql:latest
     restart: 'always'
-    entrypoint: ['/entrypoint.sh', '--default-authentication-plugin=mysql_native_password']
+    command: --default-authentication-plugin=mysql_native_password
     ports:
       - "3306:3306"
+    volumes: 
+      - ./init:/docker-entrypoint-initdb.d:z
+
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: mymoney
       MYSQL_USER: vaisakhkm
       MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: root_pass
 
     networks:
           network:
