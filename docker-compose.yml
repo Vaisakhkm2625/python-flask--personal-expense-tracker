@@ -21,12 +21,12 @@ services:
     ports:
       - "3306:3306"
     volumes: 
-      - ./init:/docker-entrypoint-initdb.d
+      - ./init:/docker-entrypoint-initdb.d:z
 
     environment:
-      MYSQL_DATABASE: mymoney
-      MYSQL_USER: vaisakhkm
-      MYSQL_PASSWORD: 1234
+      MYSQL_DATABASE: moneymind
+      MYSQL_USER: shreyas
+      MYSQL_PASSWORD: moneymindpass
       MYSQL_ROOT_PASSWORD: root_pass
 
     networks:
